@@ -1,0 +1,13 @@
+[Unit]
+Description=Send Message on System Startup
+
+[Service]
+Type=simple
+ExecStart=/bin/bash {path}/discord-startup-notify
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+After=network-online.target
+Requires=network-online.target

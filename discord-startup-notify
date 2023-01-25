@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# script to send discord notifications on system startup
+# WEBHOOK_URL var should be set in a `.env` file in this directory
+
+# test that network is connected and can resolve `discord.com`
+STATUSCODE=$(curl --silent --output /dev/null --write-out "%{http_code}"  https://discord.com)
+if test $STATUSCODE -ne 200; then
+  exit 1
+fi
+
+# find script directory
+scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
+
+# source vars from .env
+source $scriptdir/.env
+
+# send message using discord-notify script
+MSG="$(hostname) is starting up"
+curl -H "Content-Type: application/json" -X POST -d '{"content":"'"${MSG}"'"}' ${WEBHOOK_URL}
+
